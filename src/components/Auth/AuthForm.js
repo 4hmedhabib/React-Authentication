@@ -4,6 +4,7 @@ import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
 	const [ isLogin, setIsLogin ] = useState(true);
+	const [ isLoading, setIsLoading ] = useState(false);
 
 	const emailInput = useRef();
 	const passwordInput = useRef();
@@ -12,12 +13,14 @@ const AuthForm = () => {
 		setIsLogin((prevState) => !prevState);
 	};
 
+	console.log(isLoading);
+
 	const submitFormHandler = (e) => {
 		e.preventDefault();
 
 		const enteredEmail = emailInput.current.value;
 		const enteredPassword = passwordInput.current.value;
-
+		setIsLoading(true);
 		if (isLogin) {
 			// ...
 		} else {
@@ -36,6 +39,8 @@ const AuthForm = () => {
 				}
 			)
 				.then((res) => {
+					setIsLoading(false);
+					console.log('running');
 					if (res.ok) {
 						// ...
 					} else {
@@ -67,7 +72,21 @@ const AuthForm = () => {
 					<input type="password" id="password" required ref={passwordInput} />
 				</div>
 				<div className={classes.actions}>
-					<button>{isLogin ? 'Login' : 'Create Account'}</button>
+					<button
+						type="submit"
+						disabled={isLoading}
+						className="d-flex justify-content-around align-items-center"
+					>
+						{isLogin ? 'Login' : 'Create Account'}
+						{isLoading ? (
+							<div className="spinner-border spinner-border-sm m-1" role="status">
+								<span className="sr-only">Loading...</span>
+							</div>
+						) : (
+							''
+						)}
+					</button>
+
 					<button type="button" className={classes.toggle} onClick={switchAuthModeHandler}>
 						{isLogin ? 'Create new account' : 'Login with existing account'}
 					</button>
