@@ -20,31 +20,68 @@ const AuthForm = () => {
 
 		const enteredEmail = emailInput.current.value;
 		const enteredPassword = passwordInput.current.value;
+
 		setIsLoading(true);
+		let url;
 		if (isLogin) {
+			url =
+				'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAfaSQRydBK-O2tes-rHAUoJAFx8Ra3mic';
+
+			fetch(url, {
+				method: 'POST',
+				body: JSON.stringify({
+					email: enteredEmail,
+					password: enteredPassword,
+					returnSecureToken: true
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => {
+					setIsLoading(false);
+					console.log('running');
+					if (res.ok) {
+						return res.json();
+					} else {
+						return res.json().then((data) => {
+							let errMessage = 'Authentication failed!';
+							if (data && data.error && data.error.message) {
+								errMessage = data.error.message;
+							}
+							console.log(data);
+							console.log(errMessage);
+						});
+					}
+				})
+				.then((data) => {
+					console.log(data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 			// ...
 		} else {
-			fetch(
-				'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfaSQRydBK-O2tes-rHAUoJAFx8Ra3mic',
-				{
-					method: 'POST',
-					body: JSON.stringify({
-						email: enteredEmail,
-						password: enteredPassword,
-						returnSecureToken: true
-					}),
-					headers: {
-						'Content-Type': 'application/json'
-					}
+			url =
+				'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAfaSQRydBK-O2tes-rHAUoJAFx8Ra3mic';
+			fetch(url, {
+				method: 'POST',
+				body: JSON.stringify({
+					email: enteredEmail,
+					password: enteredPassword,
+					returnSecureToken: true
+				}),
+				headers: {
+					'Content-Type': 'application/json'
 				}
-			)
+			})
 				.then((res) => {
 					setIsLoading(false);
 					console.log('running');
 					if (res.ok) {
 						// ...
 					} else {
-						res.json().then((data) => {
+						return res.json().then((data) => {
 							let errMessage = 'Authentication failed!';
 							if (data && data.error && data.error.message) {
 								errMessage = data.error.message;
