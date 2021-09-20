@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { AuthContext } from '../../store/auth-contex';
 
 import classes from './AuthForm.module.css';
 
@@ -6,14 +7,14 @@ const AuthForm = () => {
 	const [ isLogin, setIsLogin ] = useState(true);
 	const [ isLoading, setIsLoading ] = useState(false);
 
+	const AuthCtx = useContext(AuthContext);
+
 	const emailInput = useRef();
 	const passwordInput = useRef();
 
 	const switchAuthModeHandler = () => {
 		setIsLogin((prevState) => !prevState);
 	};
-
-	console.log(isLoading);
 
 	const submitFormHandler = (e) => {
 		e.preventDefault();
@@ -40,21 +41,20 @@ const AuthForm = () => {
 			})
 				.then((res) => {
 					setIsLoading(false);
-					console.log('running');
 					if (res.ok) {
 						return res.json();
 					} else {
 						return res.json().then((data) => {
 							let errMessage = 'Authentication failed!';
-							if (data && data.error && data.error.message) {
-								errMessage = data.error.message;
-							}
-							console.log(data);
+							// if (data && data.error && data.error.message) {
+							// 	errMessage = data.error.message;
+							// }
 							console.log(errMessage);
 						});
 					}
 				})
 				.then((data) => {
+					AuthCtx.login(data.idToken);
 					console.log(data);
 				})
 				.catch((err) => {
@@ -77,7 +77,6 @@ const AuthForm = () => {
 			})
 				.then((res) => {
 					setIsLoading(false);
-					console.log('running');
 					if (res.ok) {
 						// ...
 					} else {
@@ -86,7 +85,7 @@ const AuthForm = () => {
 							if (data && data.error && data.error.message) {
 								errMessage = data.error.message;
 							}
-							console.log(errMessage);
+							alert(errMessage);
 						});
 					}
 				})

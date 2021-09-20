@@ -3,10 +3,13 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
+import AuthContexProvider from './store/auth-contex';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root')
+	<AuthContexProvider>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</AuthContexProvider>,
+	document.getElementById('root')
 );
