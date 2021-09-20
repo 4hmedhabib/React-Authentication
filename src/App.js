@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
@@ -8,6 +8,8 @@ import HomePage from './pages/HomePage';
 import { AuthContext } from './store/auth-contex';
 
 function App() {
+	const authCtx = useContext(AuthContext);
+
 	return (
 		<Layout>
 			<Switch>
@@ -15,10 +17,15 @@ function App() {
 					<HomePage />
 				</Route>
 				<Route path="/auth">
-					<AuthPage />
+					{!authCtx.isLoggedIn && <AuthPage />}
+					{authCtx.isLoggedIn && <Redirect to="/" />}
 				</Route>
 				<Route path="/profile">
-					<UserProfile />
+					{!authCtx.isLoggedIn && <Redirect to="/auth" />}
+					{authCtx.isLoggedIn && <UserProfile />}
+				</Route>
+				<Route path="*">
+					<h1>Page Not Found! 404 </h1>
 				</Route>
 			</Switch>
 		</Layout>
