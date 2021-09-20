@@ -1,4 +1,5 @@
 import { useState, useRef, useContext } from 'react';
+import { useHistory } from 'react-router';
 import { AuthContext } from '../../store/auth-contex';
 
 import classes from './AuthForm.module.css';
@@ -7,6 +8,7 @@ const AuthForm = () => {
 	const [ isLogin, setIsLogin ] = useState(true);
 	const [ isLoading, setIsLoading ] = useState(false);
 
+	const history = useHistory();
 	const AuthCtx = useContext(AuthContext);
 
 	const emailInput = useRef();
@@ -42,6 +44,7 @@ const AuthForm = () => {
 				.then((res) => {
 					setIsLoading(false);
 					if (res.ok) {
+						history.push('/');
 						return res.json();
 					} else {
 						return res.json().then((data) => {
@@ -79,7 +82,7 @@ const AuthForm = () => {
 				.then((res) => {
 					setIsLoading(false);
 					if (res.ok) {
-						// ...
+						// history.push('')
 					} else {
 						return res.json().then((data) => {
 							let errMessage = 'Authentication failed!';
