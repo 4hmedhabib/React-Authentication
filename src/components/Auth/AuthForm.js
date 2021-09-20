@@ -49,6 +49,7 @@ const AuthForm = () => {
 							// if (data && data.error && data.error.message) {
 							// 	errMessage = data.error.message;
 							// }
+							alert(errMessage);
 							console.log(errMessage);
 						});
 					}
