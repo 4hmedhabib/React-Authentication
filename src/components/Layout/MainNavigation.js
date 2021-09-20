@@ -9,7 +9,9 @@ const MainNavigation = () => {
 
 	const isLoggedIn = AuthCtx.isLoggedIn;
 
-	console.log('isLogged in', isLoggedIn);
+	const lougoutHandler = () => {
+		AuthCtx.logout();
+	};
 
 	return (
 		<header className={classes.header}>
@@ -30,7 +32,7 @@ const MainNavigation = () => {
 					)}
 					{isLoggedIn && (
 						<li>
-							<button>Logout</button>
+							<button onClick={lougoutHandler}>Logout</button>
 						</li>
 					)}
 				</ul>
